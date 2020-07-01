@@ -10,11 +10,12 @@ class SearchResults extends Component {
   state = {
     results: [],
     search: "",
+    saveItem: "",
   };
 
   // When this component mounts, search for the movie "The Matrix"
   componentDidMount() {
-    this.searchGoogleBooks("Harry Potter");
+    this.searchGoogleBooks("");
   }
 
   searchGoogleBooks = (query) => {
@@ -23,7 +24,19 @@ class SearchResults extends Component {
       .catch((err) => console.log(err));
   };
 
-  saveSearchItem = (bookData) => {
+  saveSearchItem = (bookID) => {
+    const data = this.state.results.find((x) => x.id === bookID);
+    console.log(data);
+
+    const bookData = {
+      title: data.volumeInfo.title,
+      authors: data.volumeInfo.authors,
+      description: data.volumeInfo.description,
+      image: data.volumeInfo.imageLinks.smallThumbnail,
+      link: data.selfLink,
+    };
+    console.log(bookData);
+
     API.saveBook(bookData)
       .then((res) => console.log("Item Saved to db"))
       .catch((err) => console.log(err));
@@ -47,7 +60,7 @@ class SearchResults extends Component {
       <Container>
         <Row>
           <Col size="24">
-            <Panel heading="Search">
+            <Panel>
               <SearchForm
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
@@ -57,7 +70,7 @@ class SearchResults extends Component {
           </Col>
           <Col size="24">
             <Panel>
-              {console.log(this.state)}
+              <h1>Results</h1>
               <ul>
                 {this.state.results.map((result) => (
                   <li key={result.id}>
@@ -65,13 +78,12 @@ class SearchResults extends Component {
                     <h2>{result.volumeInfo.authors}</h2>
                     <h2>{result.volumeInfo.description}</h2>
                     <img
-                      alt="Book Image"
+                      alt="Book"
                       src={result.volumeInfo.imageLinks.smallThumbnail}
                     />
                     <SaveBtn
-                      onClick={() => {
-                        console.log(result);
-                      }}
+                      value={result.id}
+                      onClick={() => this.saveSearchItem(result.id)}
                     />
                   </li>
                 ))}

@@ -3,7 +3,7 @@ import "./style.css";
 
 function SaveBtn(props) {
   return (
-    <button {...props} role="button">
+    <button value={props.value} id="saveBtn" onClick={props.onClick}>
       Save
     </button>
   );

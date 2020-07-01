@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import API from "../utils/API";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import DeleteBtn from "../components/DeleteBtn";
 import Panel from "../components/Panel";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
 
 function Saved() {
   // Setting our component's initial state
@@ -56,36 +54,23 @@ function Saved() {
     <Container>
       <Row>
         <Col size="24">
-          <form>
-            <Input
-              onChange={handleInputChange}
-              name="search"
-              placeholder="Harry Potter"
-            />
-            <FormBtn disabled={!formObject.title} onClick={handleFormSubmit}>
-              Search
-            </FormBtn>
-          </form>
-        </Col>
-        <Col size="24">
           <Panel>
-            <h1>Results</h1>
+            <h1>You saved Books</h1>
           </Panel>
           {books.length ? (
-            <List>
+            <ul>
               {books.map((book) => (
-                <ListItem key={book._id}>
-                  <Link to={"/books/" + book._id}>
-                    <strong>
-                      {book.title} by {book.author}
-                    </strong>
-                  </Link>
+                <li key={book._id}>
+                  <h1>{book.title}</h1>
+                  <h2>{book.authors}</h2>
+                  <h2>{book.description}</h2>
+                  <img alt="Book" src={book.image} />
                   <DeleteBtn onClick={() => deleteBook(book._id)} />
-                </ListItem>
+                </li>
               ))}
-            </List>
+            </ul>
           ) : (
-            <h3>No Results to Display</h3>
+            <h3>You haven't saved any books yet</h3>
           )}
         </Col>
       </Row>

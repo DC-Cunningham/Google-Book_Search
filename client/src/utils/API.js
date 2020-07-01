@@ -2,7 +2,7 @@ import axios from "axios";
 const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
 
 export default {
-  // Gets all books
+  // Gets all saved books
   getBooks: function () {
     return axios.get("/api/books");
   },
@@ -18,8 +18,8 @@ export default {
   saveBook: function (bookData) {
     return axios.post("/api/books", bookData);
   },
+  // Searches the Googlebooks api by the query
   search: function (query) {
-    console.log("api triggered");
     return axios.get(BASEURL + query);
   },
 };
