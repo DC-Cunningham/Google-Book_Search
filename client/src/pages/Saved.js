@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/API";
-import { Input, TextArea, FormBtn } from "../components/Form";
-import DeleteBtn from "../components/DeleteBtn";
+import Button from "../components/Button";
 import Panel from "../components/Panel";
 import { Col, Row, Container } from "../components/Grid";
 
@@ -29,49 +28,35 @@ function Saved() {
       .catch((err) => console.log(err));
   }
 
-  // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({ ...formObject, [name]: value });
-  }
-
-  // When the form is submitted, use the API.saveBook method to save the book data
-  // Then reload books from the database
-  function handleFormSubmit(event) {
-    event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis,
-      })
-        .then((res) => loadBooks())
-        .catch((err) => console.log(err));
-    }
-  }
-
   return (
     <Container>
       <Row>
         <Col size="24">
           <Panel>
-            <h1>You saved Books</h1>
+            <h1>Your saved Books</h1>
           </Panel>
-          {books.length ? (
-            <ul>
-              {books.map((book) => (
-                <li key={book._id}>
-                  <h1>{book.title}</h1>
-                  <h2>{book.authors}</h2>
-                  <h2>{book.description}</h2>
-                  <img alt="Book" src={book.image} />
-                  <DeleteBtn onClick={() => deleteBook(book._id)} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <h3>You haven't saved any books yet</h3>
-          )}
+          <tbody>
+            <tr>
+              <th>Title</th>
+              <th>Author/s</th>
+              <th>Cover</th>
+              <th></th>
+            </tr>
+            {books.map((book, i) => {
+              return [
+                <tr key={i}>
+                  <td>{book.title}</td>
+                  <td>{book.authors}</td>
+                  <td>
+                    <img alt="Book" src={book.image} />
+                  </td>
+                  <td>
+                    <Button onClick={() => deleteBook(book._id)} />
+                  </td>
+                </tr>,
+              ];
+            })}
+          </tbody>
         </Col>
       </Row>
     </Container>

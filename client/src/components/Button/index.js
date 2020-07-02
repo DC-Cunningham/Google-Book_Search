@@ -1,11 +1,11 @@
 import React from "react";
 import "./style.css";
 
-function SaveBtn(props) {
+function Button(props) {
   return (
     <button value={props.value} id="saveBtn" onClick={props.onClick}>
-      Save
+      {props.name}
     </button>
   );
 }
-export default SaveBtn;
+export default Button;

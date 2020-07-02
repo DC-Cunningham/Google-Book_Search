@@ -1,21 +1,22 @@
 import React, { Component } from "react";
-// import { Input, TextArea, FormBtn } from "../components/Form";
 import SearchForm from "../components/SearchForm";
 import Panel from "../components/Panel";
 import { Col, Row, Container } from "../components/Grid";
 import API from "../utils/API";
-import SaveBtn from "../components/SaveBtn";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
 
 class SearchResults extends Component {
   state = {
     results: [],
     search: "",
     saveItem: "",
+    showModal: false,
+    dataModal: {},
   };
 
-  // When this component mounts, search for the movie "The Matrix"
   componentDidMount() {
-    this.searchGoogleBooks("");
+    this.searchGoogleBooks("Harry");
   }
 
   searchGoogleBooks = (query) => {
@@ -26,20 +27,25 @@ class SearchResults extends Component {
 
   saveSearchItem = (bookID) => {
     const data = this.state.results.find((x) => x.id === bookID);
-    console.log(data);
-
     const bookData = {
       title: data.volumeInfo.title,
-      authors: data.volumeInfo.authors,
+      authors: data.volumeInfo.authors.map((author) => {}),
       description: data.volumeInfo.description,
       image: data.volumeInfo.imageLinks.smallThumbnail,
-      link: data.selfLink,
+      link: data.volumeInfo.infoLink,
     };
-    console.log(bookData);
-
     API.saveBook(bookData)
       .then((res) => console.log("Item Saved to db"))
       .catch((err) => console.log(err));
+  };
+
+  viewItem = (data) => {
+    console.log(data);
+    this.setState({ showModal: true, dataModal: data });
+  };
+
+  hideItem = () => {
+    this.setState({ showModal: false });
   };
 
   handleInputChange = (event) => {
@@ -76,12 +82,19 @@ class SearchResults extends Component {
                   <li key={result.id}>
                     <h1>{result.volumeInfo.title}</h1>
                     <h2>{result.volumeInfo.authors}</h2>
-                    <h2>{result.volumeInfo.description}</h2>
                     <img
                       alt="Book"
                       src={result.volumeInfo.imageLinks.smallThumbnail}
                     />
-                    <SaveBtn
+                    <Button
+                      name="View More"
+                      value={result.id}
+                      onClick={(e) => {
+                        this.viewItem(result);
+                      }}
+                    />
+                    <Button
+                      name="Save"
                       value={result.id}
                       onClick={() => this.saveSearchItem(result.id)}
                     />
@@ -91,6 +104,11 @@ class SearchResults extends Component {
             </Panel>
           </Col>
         </Row>
+        <Modal
+          show={this.state.showModal}
+          onHide={this.hideItem}
+          data={this.state.dataModal}
+        />
       </Container>
     );
   }
