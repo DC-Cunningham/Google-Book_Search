@@ -2,13 +2,13 @@ import React from "react";
 
 function SearchForm(props) {
   return (
-    <form>
+    <form className="pure-form">
       <input
         onChange={props.handleInputChange}
         value={props.value}
         name="search"
         type="text"
-        className="form-control"
+        className="pure-input-1"
         placeholder="Search For a Book"
         id="search"
       />

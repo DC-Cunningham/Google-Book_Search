@@ -1,18 +1,7 @@
 import React from "react";
-
+import "./style.css";
 function Panel({ children }) {
-  return (
-    <div
-      style={{
-        height: 300,
-        clear: "both",
-        paddingTop: 120,
-        textAlign: "center",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="panel">{children}</div>;
 }
 
 export default Panel;

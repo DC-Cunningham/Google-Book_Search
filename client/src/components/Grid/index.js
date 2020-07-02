@@ -1,22 +1,17 @@
 import React from "react";
 
-export function Container({ children }) {
-  return <div className="pure-g">{children}</div>;
-}
-
-export function Row({ children }) {
-  return <div className="pure-u-1">{children}</div>;
-}
-
-export function Col({ size, children }) {
+export function Container({ id, children }) {
   return (
-    <div
-      className={size
-        .split(" ")
-        .map((size) => "pure-u-" + size + "-24")
-        .join(" ")}
-    >
+    <div className="pure-g" id={id}>
       {children}
     </div>
   );
+}
+
+export function Row({ size, id, blah, children }) {
+  return <div className={`${blah || ""} pure-u-${size}`}>{children}</div>;
+}
+
+export function Col({ size, blah, children }) {
+  return <div className={`${blah || ""} pure-u-${size}-24`}>{children}</div>;
 }

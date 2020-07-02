@@ -4,7 +4,9 @@
   margin-right: auto;
   margin-left: auto;
   align-items: center;
+  letter-spacing: normal;
 }
+
 @media (min-width: 768px) {
   .container {
     width: 750px;

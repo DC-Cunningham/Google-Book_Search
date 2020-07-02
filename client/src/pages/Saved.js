@@ -3,11 +3,12 @@ import API from "../utils/API";
 import Button from "../components/Button";
 import Panel from "../components/Panel";
 import { Col, Row, Container } from "../components/Grid";
+import Link from "../components/Link";
+import "./pages.css";
 
 function Saved() {
   // Setting our component's initial state
   const [books, setBooks] = useState([]);
-  const [formObject, setFormObject] = useState({});
 
   // Load all books and store them with setBooks
   useEffect(() => {
@@ -30,33 +31,29 @@ function Saved() {
 
   return (
     <Container>
-      <Row>
-        <Col size="24">
+      <Row size="md-3">
+        <Col size="24" className="book">
           <Panel>
             <h1>Your saved Books</h1>
+            <ul>
+              {books.map((book, i) => (
+                <li key={i}>
+                  <Row size="md-3">
+                    <Col size="12">
+                      <h1>{book.title}</h1>
+                      <h2>{book.authors}</h2>
+                      <img alt="Book" src={book.image} />
+                      <p>{book.description}</p>
+                    </Col>
+                  </Row>
+                  <Link to={book.link} target="_blank">
+                    <Button name="View in Google Books" />
+                  </Link>
+                  <Button onClick={() => deleteBook(book._id)} name="Remove" />
+                </li>
+              ))}
+            </ul>
           </Panel>
-          <tbody>
-            <tr>
-              <th>Title</th>
-              <th>Author/s</th>
-              <th>Cover</th>
-              <th></th>
-            </tr>
-            {books.map((book, i) => {
-              return [
-                <tr key={i}>
-                  <td>{book.title}</td>
-                  <td>{book.authors}</td>
-                  <td>
-                    <img alt="Book" src={book.image} />
-                  </td>
-                  <td>
-                    <Button onClick={() => deleteBook(book._id)} />
-                  </td>
-                </tr>,
-              ];
-            })}
-          </tbody>
         </Col>
       </Row>
     </Container>

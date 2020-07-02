@@ -5,6 +5,7 @@ import { Col, Row, Container } from "../components/Grid";
 import API from "../utils/API";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
+import "./pages.css";
 
 class SearchResults extends Component {
   state = {
@@ -29,7 +30,7 @@ class SearchResults extends Component {
     const data = this.state.results.find((x) => x.id === bookID);
     const bookData = {
       title: data.volumeInfo.title,
-      authors: data.volumeInfo.authors.map((author) => {}),
+      authors: data.volumeInfo.authors,
       description: data.volumeInfo.description,
       image: data.volumeInfo.imageLinks.smallThumbnail,
       link: data.volumeInfo.infoLink,
@@ -40,7 +41,6 @@ class SearchResults extends Component {
   };
 
   viewItem = (data) => {
-    console.log(data);
     this.setState({ showModal: true, dataModal: data });
   };
 
@@ -64,8 +64,8 @@ class SearchResults extends Component {
   render() {
     return (
       <Container>
-        <Row>
-          <Col size="24">
+        <Row size="1-1">
+          <Col size="">
             <Panel>
               <SearchForm
                 value={this.state.search}
