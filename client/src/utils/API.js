@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
+const GoogleBooksURL = "https://www.googleapis.com/books/v1/volumes?q=";
 
 export default {
   // Gets all saved books
@@ -20,6 +20,6 @@ export default {
   },
   // Searches the Googlebooks api by the query
   search: function (query) {
-    return axios.get(BASEURL + query);
+    return axios.get(GoogleBooksURL + query);
   },
 };

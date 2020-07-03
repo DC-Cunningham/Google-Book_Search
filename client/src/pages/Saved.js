@@ -32,7 +32,7 @@ function Saved() {
   return (
     <Container>
       <Row size="md-3">
-        <Col size="24" className="book">
+        <Col size="24" id="book">
           <Panel>
             <h1>Your saved Books</h1>
             <ul>
