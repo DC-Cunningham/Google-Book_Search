@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import CardMedia from "@material-ui/core/CardMedia";
-import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Button,
+  CardMedia,
+  Grid,
+  Toolbar,
+  Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  AccordionActions,
+  makeStyles,
+} from "@material-ui/core";
 import API from "../utils/API";
 import SearchForm from "../components/SearchForm";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionActions from "@material-ui/core/AccordionActions";
+import { ExpandMore } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -143,7 +145,7 @@ function Search() {
               onChange={handleChange(book.id)}
             >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMore />}
                 aria-controls="panel1c-content"
                 id="panel1c-header"
               >

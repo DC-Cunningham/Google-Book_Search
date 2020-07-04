@@ -1,9 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import SearchIcon from "@material-ui/icons/Search";
+import { Grid, TextField, Button, makeStyles } from "@material-ui/core/";
+import { Search } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +46,7 @@ export default function searchForm(props) {
             variant="contained"
             color="primary"
           >
-            <SearchIcon className={classes.icon} />
+            <Search className={classes.icon} />
           </Button>
         </Grid>
       </Grid>
