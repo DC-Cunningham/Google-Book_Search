@@ -83,8 +83,8 @@ function Search() {
 
   const saveSearchItem = (bookID) => {
     const book = books.find((x) => x.id === bookID);
-    console.log(book);
     const bookData = {
+      googleID: book.id,
       title: book.volumeInfo.title,
       authors: book.volumeInfo.authors,
       description: book.volumeInfo.description,

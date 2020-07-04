@@ -32,7 +32,6 @@ function Footer() {
         align="center"
         color="textSecondary"
         component="p"
-        sticky
       >
         Built Using React, Mongo, Express, Node and Material UI
       </Typography>
