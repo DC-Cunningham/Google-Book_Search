@@ -1,16 +1,68 @@
 import React, { useState, useEffect } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import CardMedia from "@material-ui/core/CardMedia";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 import API from "../utils/API";
-import Button from "../components/Button";
-import Panel from "../components/Panel";
-import { Col, Row, Container } from "../components/Grid";
-import Link from "../components/Link";
-import "./pages.css";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionActions from "@material-ui/core/AccordionActions";
+
+const useStyles = makeStyles((theme) => ({
+  appbar: {
+    alignItems: "center",
+    backgroundColor: theme.palette.background.paper,
+    color: "black",
+    marginTop: "20px",
+    marginBottom: "20px",
+  },
+  buttons: {},
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  cardMedia: {
+    width: "150px",
+    height: "200px",
+  },
+  expand: {
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: "rotate(180deg)",
+  },
+  icon: {
+    verticalAlign: "bottom",
+    height: 20,
+    width: 20,
+  },
+  description: {
+    alignItems: "center",
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+}));
 
 function Saved() {
-  // Setting our component's initial state
   const [books, setBooks] = useState([]);
+  const [expanded, setExpanded] = useState(false);
+  const classes = useStyles();
 
-  // Load all books and store them with setBooks
+  // Load all stored books
   useEffect(() => {
     loadBooks();
   }, []);
@@ -23,40 +75,103 @@ function Saved() {
   }
 
   // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
-    API.deleteBook(id)
+  const deleteBook = (book) => {
+    API.deleteBook(book._id)
+      .then((res) => console.log(`${book.title} removed from the database`))
       .then((res) => loadBooks())
       .catch((err) => console.log(err));
-  }
+  };
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
-    <Container>
-      <Row size="md-3">
-        <Col size="24" id="book">
-          <Panel>
-            <h1>Your saved Books</h1>
-            <ul>
-              {books.map((book, i) => (
-                <li key={i}>
-                  <Row size="md-3">
-                    <Col size="12">
-                      <h1>{book.title}</h1>
-                      <h2>{book.authors}</h2>
-                      <img alt="Book" src={book.image} />
-                      <p>{book.description}</p>
-                    </Col>
-                  </Row>
-                  <Link to={book.link} target="_blank">
-                    <Button name="View in Google Books" />
-                  </Link>
-                  <Button onClick={() => deleteBook(book._id)} name="Remove" />
-                </li>
-              ))}
-            </ul>
-          </Panel>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <AppBar className={classes.appbar} position="relative" align="center">
+        <Toolbar>
+          <Typography variant="h4" color="inherit">
+            Your Saved Books
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <main>
+        {books.length ? (
+          books.map((book) => (
+            <Accordion
+              expanded={expanded === book._id}
+              onChange={handleChange(book._id)}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1c-content"
+                id="panel1c-header"
+              >
+                <Grid container spacing={0}>
+                  <Grid item xs={2}>
+                    <CardMedia
+                      component="img"
+                      className={classes.cardMedia}
+                      image={book.image}
+                      height="300"
+                      title="Image title"
+                    />
+                  </Grid>
+                  <Grid item xs={10}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Title:
+                    </Typography>
+                    <Typography variant="h3">{book.title}</Typography>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Author/s:
+                    </Typography>
+                    <Typography variant="5">
+                      {book.authors.join(" & ")}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </AccordionSummary>
+              <AccordionDetails className={classes.description}>
+                <Typography variant="caption">
+                  {book.description}
+                  <br />
+                </Typography>
+              </AccordionDetails>
+              <AccordionActions>
+                <Button
+                  target="_blank"
+                  variant="contained"
+                  href={book.link}
+                  color="primary"
+                  size="small"
+                  className={classes.buttons}
+                >
+                  View
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  value={book.id}
+                  className={classes.buttons}
+                  onClick={() => deleteBook(book)}
+                >
+                  Delete
+                </Button>
+              </AccordionActions>
+            </Accordion>
+          ))
+        ) : (
+          <AppBar className={classes.appbar} position="relative" align="center">
+            <Toolbar>
+              <Typography variant="h4" color="error">
+                You haven't saved any books to the database yet
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        )}
+      </main>
+    </>
   );
 }
 

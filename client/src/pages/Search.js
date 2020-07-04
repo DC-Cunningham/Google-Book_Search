@@ -1,73 +1,35 @@
 import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import SearchIcon from "@material-ui/icons/Search";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
 import API from "../utils/API";
 import SearchForm from "../components/SearchForm";
-import clsx from "clsx";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionActions from "@material-ui/core/AccordionActions";
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
+  appbar: {
+    alignItems: "center",
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+    color: "black",
+    marginTop: "20px",
+    marginBottom: "20px",
   },
-  heroButtons: {
-    background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-    border: 0,
-    borderRadius: 3,
-    boxShadow: "0 3px 5px 2px rgba(33, 203, 243, .3)",
-    color: "white",
-    height: 48,
-    padding: "0 30px",
-    marginLeft: "10px",
-    marginRight: "10px",
-  },
+  buttons: {},
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
   cardMedia: {
-    height: "70%",
-    width: "70%",
-    margin: "15%",
-  },
-  cardContent: {
-    flexGrow: 1,
+    width: "150px",
+    height: "200px",
   },
   expand: {
     transform: "rotate(0deg)",
@@ -79,9 +41,24 @@ const useStyles = makeStyles((theme) => ({
   expandOpen: {
     transform: "rotate(180deg)",
   },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
+  icon: {
+    verticalAlign: "bottom",
+    height: 20,
+    width: 20,
+  },
+  description: {
+    alignItems: "center",
+  },
+  helper: {
+    borderLeft: `2px solid ${theme.palette.divider}`,
+    padding: theme.spacing(1, 2),
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 }));
 
@@ -90,10 +67,9 @@ function Search() {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const classes = useStyles();
 
-  useEffect(() => {
-    searchGoogleBooks("Harry");
-  }, []);
+  useEffect(() => {}, []);
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
@@ -102,7 +78,7 @@ function Search() {
   const searchGoogleBooks = (query) => {
     API.search(query)
       .then((res) => setBooks(res.data.items))
-      .catch((err) => setError(err));
+      .catch((err) => console.log(err.message));
   };
 
   const saveSearchItem = (bookID) => {
@@ -116,8 +92,8 @@ function Search() {
       link: book.volumeInfo.infoLink,
     };
     API.saveBook(bookData)
-      .then((res) => console.log("Item Saved to db"))
-      .catch((err) => console.log(err));
+      .then((res) => console.log(`${bookData.title} Saved to the database`))
+      .catch((err) => setError(err));
   };
 
   const handleFormSubmit = (event) => {
@@ -125,25 +101,22 @@ function Search() {
     searchGoogleBooks(search);
   };
 
-  const classes = useStyles();
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <AppBar position="relative">
+    <>
+      <AppBar className={classes.appbar} position="relative" align="center">
         <Toolbar>
-          <SearchIcon className={classes.icon} />
-          <Typography variant="h4" color="inherit" noWrap>
+          <Typography variant="h4" color="inherit">
             Search for and save books of interest
           </Typography>
         </Toolbar>
       </AppBar>
       <main>
-        <div className={classes.heroContent}>
-          <Container maxWidth="sm">
+        <AppBar className={classes.appbar} position="relative" align="center">
+          <Toolbar>
             <Typography
               component="h1"
               variant="h2"
@@ -157,30 +130,25 @@ function Search() {
                   handleInputChange={handleInputChange}
                   handleFormSubmit={handleFormSubmit}
                   value={search}
+                  label="search for a book in GoogleBooks"
                 />
               </Grid>
-              <Grid item>
-                Show book descriptions
-                <IconButton
-                  className={clsx(classes.expand, {
-                    [classes.expandOpen]: expanded,
-                  })}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="show descriptions"
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </Grid>
             </Grid>
-          </Container>
-        </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          <Grid container spacing={4}>
-            {books.length ? (
-              books.map((book) => (
-                <Grid item key={book.id} sm={12} md={6}>
-                  <Card className={classes.card}>
+          </Toolbar>
+        </AppBar>
+        {books.length ? (
+          books.map((book) => (
+            <Accordion
+              expanded={expanded === book.id}
+              onChange={handleChange(book.id)}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1c-content"
+                id="panel1c-header"
+              >
+                <Grid container spacing={0}>
+                  <Grid item xs={2}>
                     <CardMedia
                       component="img"
                       className={classes.cardMedia}
@@ -188,82 +156,58 @@ function Search() {
                       height="300"
                       title="Image title"
                     />
-                    <CardContent className={classes.cardContent}>
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        Title:
-                      </Typography>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {book.volumeInfo.title}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        Author/s:
-                      </Typography>
-                      <Typography>{book.volumeInfo.authors}</Typography>
-                    </CardContent>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                      <CardContent>
-                        <Typography paragraph>Description:</Typography>
-                        <Typography paragraph>
-                          {book.volumeInfo.description}
-                        </Typography>
-                      </CardContent>
-                    </Collapse>
-                    <CardActions>
-                      <Button
-                        target="_blank"
-                        variant="contained"
-                        href={book.volumeInfo.infoLink}
-                        color="primary"
-                        size="small"
-                        className={classes.heroButtons}
-                      >
-                        View
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        value={book.id}
-                        className={classes.heroButtons}
-                        onClick={saveSearchItem.bind(this, book.id)}
-                      >
-                        Save
-                      </Button>
-                    </CardActions>
-                  </Card>
+                  </Grid>
+                  <Grid item xs={10}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Title:
+                    </Typography>
+                    <Typography variant="h3">
+                      {book.volumeInfo.title}
+                    </Typography>
+                    <Typography variant="caption" display="block" gutterBottom>
+                      Author/s:
+                    </Typography>
+                    <Typography variant="5">
+                      {book.volumeInfo.authors.join(" & ")}
+                    </Typography>
+                  </Grid>
                 </Grid>
-              ))
-            ) : (
-              <p>{error}</p>
-            )}
-          </Grid>
-        </Container>
+              </AccordionSummary>
+              <AccordionDetails className={classes.description}>
+                <Typography variant="caption">
+                  {book.volumeInfo.description}
+                  <br />
+                </Typography>
+              </AccordionDetails>
+              <AccordionActions>
+                <Button
+                  target="_blank"
+                  variant="contained"
+                  href={book.volumeInfo.infoLink}
+                  color="primary"
+                  size="small"
+                  className={classes.buttons}
+                >
+                  View
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  value={book.id}
+                  className={classes.buttons}
+                  onClick={saveSearchItem.bind(this, book.id)}
+                >
+                  Save
+                </Button>
+              </AccordionActions>
+            </Accordion>
+          ))
+        ) : (
+          <p>{error.message}</p>
+        )}
       </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="textSecondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
-    </React.Fragment>
+    </>
   );
 }
 

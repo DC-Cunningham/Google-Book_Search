@@ -1,68 +1,3 @@
-// import React from "react";
-// import { NavLink } from "react-router-dom";
-// import "./style.css";
-// import { Box, Row, Container } from "material-ui/components";
-// import Panel from "../Panel";
-
-// function Header() {
-//   return (
-//     <>
-//       <Box>
-//         <Container maxWidth="sm">
-//           <Col size="10">
-//             <h1 className="nav-title">Google Book Search</h1>
-//           </Col>
-//           <Col size="10">
-//             <div className="nav-links">
-//               <NavLink
-//                 to="/search"
-//                 style={{
-//                   fontWeight: "bold",
-//                   color: "black",
-//                   textDecoration: "none",
-//                 }}
-//                 activeStyle={{
-//                   fontWeight: "bold",
-//                   color: "lightgrey",
-//                   textDecoration: "none",
-//                 }}
-//               >
-//                 SEARCH
-//               </NavLink>
-//               <NavLink
-//                 to="/saved"
-//                 style={{
-//                   fontWeight: "bold",
-//                   color: "black",
-//                   textDecoration: "none",
-//                 }}
-//                 activeStyle={{
-//                   fontWeight: "bold",
-//                   color: "lightgrey",
-//                   textDecoration: "none",
-//                 }}
-//               >
-//                 SAVED
-//               </NavLink>
-//             </div>
-//           </Col>
-//         </Container>
-//       </Box>
-//       <Box>
-//         <Row size="1-1">
-//           <Col size="">
-//             <Panel>
-//               <h1>Search for and save books of interest</h1>
-//             </Panel>
-//           </Col>
-//         </Row>
-//       </Box>
-//     </>
-//   );
-// }
-
-// export default Header;
-
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -73,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Saved from "../../pages/Saved.js";
 import Search from "../../pages/Search.js";
+import BackgroundImage from "../../assets/images/library-wall.jpg";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -122,7 +58,26 @@ function LinkTab(props) {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    background: "0 3px 5px 2px rgba(33, 203, 243, .3)",
+    backgroundImage: "url('../../assets/images/library-wall.jpg')",
+  },
+  header: {
+    background: "linear-gradient(45deg, #000000 30%, #FFFFFF 90%)",
+    border: 0,
+    borderRadius: 3,
+    marginTop: "20px",
+    boxShadow: "5px 10px 8px 10px #888888",
+  },
+  headerText: {
+    fontFamily: "Impact",
+    margin: "20px",
+  },
+  tab: {
+    backgroundColor: theme.palette.background.paper,
+    margin: "10px",
+  },
+  background: {
+    backgroundImage: `url(${BackgroundImage})`,
+    backgroundSize: "100%",
   },
 }));
 
@@ -136,24 +91,36 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Typography variant="h1" gutterBottom>
+      <AppBar position="static" className={classes.header}>
+        <Typography className={classes.headerText} variant="h1" gutterBottom>
           Google Book Search
         </Typography>
         <Tabs
-          variant="fullWidth"
           value={value}
           onChange={handleChange}
           aria-label="nav tabs"
+          indicatorColor="primary"
+          textColor="primary"
+          centered
         >
-          <LinkTab label="Search" href="/search" {...a11yProps(0)} />
-          <LinkTab label="Saved" href="/saved" {...a11yProps(1)} />
+          <LinkTab
+            className={classes.tab}
+            label="Search for some new books"
+            href="/search"
+            {...a11yProps(0)}
+          />
+          <LinkTab
+            className={classes.tab}
+            label="View your saved books"
+            href="/saved"
+            {...a11yProps(1)}
+          />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel className={classes.background} value={value} index={0}>
         <Search />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel className={classes.background} value={value} index={1}>
         <Saved />
       </TabPanel>
     </div>
