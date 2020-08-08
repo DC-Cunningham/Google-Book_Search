@@ -51,4 +51,4 @@ When the user loads the main page, they are given the ability to search the Boog
 
 ## License
 
-© 2020 Revolution Research Laboratories Pty.Ltd. All Rights Reserved.
+[© 2020 The Beautiful Revolution All Rights Reserved.](https://www.beautifulrevolution.com.au)
