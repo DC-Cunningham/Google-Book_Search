@@ -35,7 +35,7 @@ The application has been deployed on Heroku [here](https://majestic-canyonlands-
 
 ## Usage
 
-When the user loads the main page, they are given the ability to search the BoogleBooks database:
+When the user loads the main page, they are given the ability to search the GoogleBooks database:
 
 - Once a search is done a list of books is rendered from the search request, within this list the user is able to save books to a Mongo database.
 
